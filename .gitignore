@@ -1,3 +1,5 @@
 *.sublime*
 *.ini
 *.db
+connection.php
+*.log

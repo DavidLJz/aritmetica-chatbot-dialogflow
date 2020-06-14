@@ -54,15 +54,24 @@
 				break;
 									
 			case '/':
-				$result = $a/$b;
+				$result = (!empty($b)) 
+					? $a/$b 
+					: NULL;
 				break;
 		}
 
-		echo json_encode((array(
-			'fulfillmentText' => 'El resultado es: *'.$result
-				.'*. Realiza otra operación escribiendo el comando *MathsApp*',
-			'source' => 'MathsApp')));
+		if(isset($result)){
+			echo json_encode((array(
+				'fulfillmentText' => 'El resultado es: *'.$result
+					.'*. Realiza otra operación escribiendo el comando *MathsApp*',
+				'source' => 'MathsApp')));
+		}else{
+			echo json_encode((array(
+				'fulfillmentText' => '*Es imposible dividir entre 0!* Realiza otra operación escribiendo el comando *MathsApp*',
+				'source' => 'MathsApp')));			
+		}
 
+		exit();
 	}
 
 	function logRequest($input){

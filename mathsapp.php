@@ -1,25 +1,5 @@
 <?php 
 
-  require('connection.php');
-  
-	define('mathInput', 'projects/mathsapp-flow-cirbyf/agent/intents/4058c8f9-bffb-40ef-9794-22f9503309cd');
-  
-  function pickAgent($req){
-	  $intName = ($req) ? $req['queryResult']['intent']['name'] : exit();
-
-	  switch ($intName) {
-	  	case ($intName === mathInput):
-	  		mathsApp($req);
-	  		break;
-	  	
-	  	default:
-	  		exit();
-	  		break;
-	  }
-
-	  return $agent;
-	}
-
 	function mathsApp($req){
 		$allParams = $req['queryResult']['allRequiredParamsPresent'];
 		if($allParams === 0) exit();
@@ -75,25 +55,20 @@
 	}
 
 	function logRequest($input){
-		switch ($input) {
-			case (is_array($input)):
-				ob_start();
-				print_r($input);
-				$input = ob_get_contents();
-				ob_end_clean();
-				file_put_contents('request.log',$input.PHP_EOL,FILE_APPEND);
-				break;
-			
-			default:
-				file_put_contents('vars.log',$input.PHP_EOL,FILE_APPEND);
-				break;
+		if(is_array($input)){
+			ob_start();
+			print_r($input);
+			$input = ob_get_contents();
+			ob_end_clean();
+			file_put_contents('request.log',$input.PHP_EOL,FILE_APPEND);
+		}elseif(is_string($input)){
+			file_put_contents('vars.log',$input.PHP_EOL,FILE_APPEND);			
 		}
 	}
 
-
-  //obtenemos el post desde dw
-  $req = file_get_contents("php://input");
-  $req = json_decode($req, true);
+  	//obtenemos el post desde dw
+  	$req = file_get_contents("php://input");
+  	$req = json_decode($req, true);
 
 	mathsApp($req);
 
